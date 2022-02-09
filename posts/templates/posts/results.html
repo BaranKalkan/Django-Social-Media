@@ -1,0 +1,9 @@
+<h1>{{ post.media_path }}</h1>
+
+<ul>
+{% for comment in post.comment_set.all %}
+    <li>{{ comment.comment_text }}</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'posts:detail' post.id %}">Comment again?</a>

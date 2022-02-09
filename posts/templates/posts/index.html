@@ -1,0 +1,45 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'posts/style.css' %}">
+
+<ul class="sidebar-nav">
+  {% if user.is_authenticated %}
+    <li>User: {{ user.get_username }}</li>
+    <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+  {% else %}
+    <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+  {% endif %}
+</ul>
+
+{% if latest_post_list %}
+    <ul>
+      {% for post in latest_post_list %}
+      <div class="container">
+        <p class="post-header">@{{ post.owner }}</p>
+        <img src="{% static 'posts/images/' %}{{post.media_path}}" alt="My image">
+        <div class="post-info">
+          <div class="post-like">
+            <div>
+            -->{{ post.is_liked }}<--
+              <i style="font-size: 24px;" class="far fa-heart"></i>
+              <i style="font-size: 24px;" class="far fa-comment"></i> 
+            </div>
+            
+              <strong>{{ post.num_likes }} likes</strong>
+          </div>
+          <div class="post-desc"><strong>@{{ post.owner }}</strong>  {{post.media_desc}}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </ul>
+{% else %}
+    <p>No posts are available.</p>
+{% endif %}
+
+
+<!--
+
+    {% load static %}
+    <img src="{% static 'my_app/example.jpg' %}" alt="My image">
+
+-->
