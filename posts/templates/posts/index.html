@@ -1,6 +1,37 @@
 {% load static %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'posts/style.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+      $(".like-button").click(function(){
+          var clickedLikeButton = $(this);
+          $.post("{% url 'posts:like'%}",
+          {
+            post_id : clickedLikeButton.val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          function(data,status){
+            if(data.is_liked){
+              clickedLikeButton.html("Liked");
+              if(!clickedLikeButton.hasClass("liked"))
+              {
+                clickedLikeButton.addClass("liked");
+              }
+            }
+            else{
+              clickedLikeButton.html("Like")
+              if(clickedLikeButton.hasClass("liked"))
+              {
+                clickedLikeButton.removeClass("liked");
+              }
+            }
+            $('#'+clickedLikeButton.val()).html( + data.like_count + ' likes');
+          });
+      });
+  });
+</script>
 
 <ul class="sidebar-nav">
   {% if user.is_authenticated %}
@@ -20,12 +51,15 @@
         <div class="post-info">
           <div class="post-like">
             <div>
-            -->{{ post.is_liked }}<--
-              <i style="font-size: 24px;" class="far fa-heart"></i>
+              {% if post.is_liked %} 
+              <button value="{{post.id}}" class="like-button liked">Liked</button>
+              {% else %}
+              <button value="{{post.id}}" class="like-button">Like</button>
+              {% endif %}
               <i style="font-size: 24px;" class="far fa-comment"></i> 
             </div>
             
-              <strong>{{ post.num_likes }} likes</strong>
+              <strong id={{post.id}}>{{ post.num_likes }} likes</strong>
           </div>
           <div class="post-desc"><strong>@{{ post.owner }}</strong>  {{post.media_desc}}</div>
         </div>

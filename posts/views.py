@@ -1,17 +1,15 @@
 from django.http import HttpResponse, HttpResponseRedirect
+import json
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
-from django.db.models import Count
-from django.db.models import Exists, OuterRef
-
-from .models import Comment, Post, PostLikes
-
+from django.db.models import Count, Exists, OuterRef
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-# ...
+from .models import Comment, Post, PostLikes
+
 
 @login_required
 def results(request, post_id):
@@ -27,7 +25,9 @@ class IndexView(LoginRequiredMixin,generic.ListView):
             
         return Post.objects.filter(
                 pub_date__lte = timezone.now()
-            ).annotate(num_likes=Count('likes')).annotate(is_liked=Exists(PostLikes.objects.filter(user=self.request.user,post_id=OuterRef('pk')))).order_by('-pub_date')[:5]
+            ).annotate(num_likes=Count('likes')
+            ).annotate(is_liked=Exists(PostLikes.objects.filter(user=self.request.user,post_id=OuterRef('pk')))
+            ).order_by('-pub_date')[:5]
 
 class DetailView(LoginRequiredMixin,generic.DetailView):
     model = Post
@@ -74,5 +74,16 @@ def vote(request, question_id):
 """
 
 @login_required
-def vote(request, post_id):
-    return HttpResponse("You're commenting on post %s." % post_id)
+def LikePost(request):
+    post = get_object_or_404(Post, pk=request.POST['post_id'])
+    
+    is_liked = False
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        is_liked = False
+    else:
+        post.likes.add(request.user)
+        is_liked= True
+    
+    dict = {'like_count':post.likes.count(), 'is_liked':is_liked}
+    return HttpResponse(json.dumps(dict), content_type='application/json')
