@@ -25,7 +25,8 @@ class IndexView(LoginRequiredMixin,generic.ListView):
             
         return Post.objects.filter(
                 pub_date__lte = timezone.now()
-            ).annotate(num_likes=Count('likes')
+            ).annotate(num_likes=Count('likes', distinct=True)
+            ).annotate(num_comments=Count('comment', distinct=True)
             ).annotate(is_liked=Exists(PostLikes.objects.filter(user=self.request.user,post_id=OuterRef('pk')))
             ).order_by('-pub_date')[:5]
 
@@ -53,7 +54,13 @@ class UserPostsView(LoginRequiredMixin,generic.ListView):
 class ResultsView(LoginRequiredMixin,generic.DetailView):
     model = Post
     template_name = 'posts/results.html'
-   
+    
+    def get_queryset(self):
+        return Post.objects.filter(
+                pub_date__lte = timezone.now()
+            ).annotate(num_likes=Count('likes')
+            ).annotate(is_liked=Exists(PostLikes.objects.filter(user=self.request.user,post_id=OuterRef('pk')))
+            )
 
 """
 def index(request):
@@ -86,4 +93,17 @@ def LikePost(request):
         is_liked= True
     
     dict = {'like_count':post.likes.count(), 'is_liked':is_liked}
+    return HttpResponse(json.dumps(dict), content_type='application/json')
+
+    
+@login_required
+def CommentPost(request):
+    post = get_object_or_404(Post, pk=request.POST['post_id'])
+    
+    b = Comment(user=request.user, post=post, comment_text=request.POST['comment'])
+    b.save()
+    # post.comment.add(b)
+    
+    
+    dict = {'success':True, 'Comment':"successful"}
     return HttpResponse(json.dumps(dict), content_type='application/json')

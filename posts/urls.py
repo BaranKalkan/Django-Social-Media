@@ -12,6 +12,8 @@ urlpatterns = [
     path('profile', views.UserPostsView.as_view(), name='profile'),
     # ex: /polls/5/results/
     path('<int:pk>/results/', views.ResultsView.as_view(), name='results'),
-    path('likepost', views.LikePost, name="like")
+    
+    path('likepost', views.LikePost, name="like"),
+    path('commentpost', views.CommentPost, name="comment")
  
 ]

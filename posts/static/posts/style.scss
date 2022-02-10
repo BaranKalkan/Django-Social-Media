@@ -54,3 +54,41 @@ body {
 .liked {
     background-color: rgb(197, 74, 74);
 }
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+.comment-input {
+    padding: 8px;
+    font-size: 15px;
+    border-width: 1px;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 15px;
+    box-shadow: 3px 3px 8px rgba(66,66,66,.24);
+}
+
+
+
+.like-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    &::-moz-focus-inner {
+        border: 0;
+    }
+    svg {
+        outline: none;
+        fill: rgba(255, 255, 255, 0);
+    }
+}
+
+.liked {
+    svg{
+        fill: rgb(216, 68, 68) !important;
+    }
+}
