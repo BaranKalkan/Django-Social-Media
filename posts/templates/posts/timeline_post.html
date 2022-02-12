@@ -1,0 +1,38 @@
+{% extends "posts/base_post.html" %}
+{% load static %}
+
+{% block media %}
+    <a href="{% url 'posts:results' post.pk %}">
+        {{ block.super }}
+    </a>
+{% endblock media %}
+
+
+{% block buttons-left %}
+    {{ block.super }}
+    
+    <a href="{% url 'posts:results' post.pk %}">
+        <span class="material-icons">
+            chat_bubble_outline
+        </span>
+    </a>
+{% endblock buttons-left %}
+
+{% block comments %}
+<ul>
+    {% for comment in post.comment_set.all|slice:"0:3" %}
+    <li>
+        <strong>@{{comment.user}}</strong> {{ comment.comment_text }}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock comments %}
+
+
+{% block postcomment-section %}
+    {% if post.comment_set.count > 3 %}
+        <a href="{% url 'posts:results' post.pk %}">
+            <p>View all {{post.comment_set.count}} comments </p>
+        </a>
+    {% endif %}
+{% endblock postcomment-section %}

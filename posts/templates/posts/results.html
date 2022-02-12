@@ -1,95 +1,62 @@
+{% extends "posts/base.html" %}
 {% load static %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'posts/style.css' %}">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="0px" height="0px">
-  <defs>
-   <g id="heart">
-    <path d="m0 200v-200h200a100 100 90 0 1 0 200 100 100 90 0 1-200 0z"/>
-   </g>
-  </defs>
-</svg>
+{% block title %}Post Details{% endblock %}
+
+
+{% block content %}
+
 <script>
-$(document).ready(function(){
-  $(".like-button").click(function(){
-    var clickedLikeButton = $(this);
-    $.post("{% url 'posts:like'%}",
-    {
-      post_id : clickedLikeButton.val(),
-      csrfmiddlewaretoken: '{{ csrf_token }}'
-    },
-    function(data,status){
-      if(data.is_liked){
-        if(!clickedLikeButton.hasClass("liked"))
+  $(document).ready(function(){
+    $(".like-button").click(function(){
+        var clickedLikeButton = $(this);
+        $.post("{% url 'posts:like'%}",
         {
-          clickedLikeButton.addClass("liked");
-        }
-      }
-      else{
-        if(clickedLikeButton.hasClass("liked"))
+          post_id : clickedLikeButton.val(),
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        function(data,status){
+          if(data.is_liked){
+            if(!clickedLikeButton.hasClass("liked"))
+            {
+              clickedLikeButton.addClass("liked");
+              clickedLikeButton.html("favorite")
+            }
+          }
+          else{
+            if(clickedLikeButton.hasClass("liked"))
+            {
+              clickedLikeButton.removeClass("liked");
+              clickedLikeButton.html("favorite_border")
+            }
+          }
+          $('#'+clickedLikeButton.val()).html( + data.like_count + ' likes');
+        });
+    });
+ 
+    $("#comment-send").click(function(){
+      var clickedButton = $(this);
+      clickedButton.prop('disabled', true)
+    
+      $.post("{% url 'posts:comment'%}",
+      {
+        post_id : clickedButton.val(),
+        comment : $(".comment-input").val(),
+        csrfmiddlewaretoken: '{{ csrf_token }}'
+      },
+      function(data,status){
+        if(data.success)
         {
-          clickedLikeButton.removeClass("liked");
+          location.reload();
         }
-      }
-      $('#'+clickedLikeButton.val()).html( + data.like_count + ' likes');
+        else
+        {
+          clickedButton.prop('disabled', false)
+        }
+      });
     });
   });
+  </script>
   
-  $("#comment-send").click(function(){
-    var clickedButton = $(this);
-    clickedButton.prop('disabled', true)
-  
-    $.post("{% url 'posts:comment'%}",
-    {
-      post_id : clickedButton.val(),
-      comment : $(".comment-input").val(),
-      csrfmiddlewaretoken: '{{ csrf_token }}'
-    },
-    function(data,status){
-      if(data.success)
-      {
-        location.reload();
-      }
-      else
-      {
-        clickedButton.prop('disabled', false)
-      }
-    });
-  });
-});
-</script>
-
-<div class="container">
-    <p class="post-header">@{{ post.owner }}</p>
-    <img src="{% static 'posts/images/' %}{{post.media_path}}" alt="My image">
-    <div class="post-info">
-      <div class="post-like">
-        <div>
-          {% if post.is_liked %} 
-          <button value="{{post.id}}" class="like-button liked">
-          {% else %}
-          <button value="{{post.id}}" class="like-button">
-          {% endif %}
-            <svg viewBox="0 0 400 400" width="32px" height="32px">
-                <use transform="matrix(-.60819 -.60685 .60819 -.60685 170.83 291.51)" stroke="#262626" stroke-linejoin="round" stroke-width="48" xlink:href="#heart"/>
-            </svg>
-          </button>
-          <i style="font-size: 24px;" class="far fa-comment"></i> 
-        </div>
-
-            <strong id={{post.id}}>{{ post.num_likes }} likes</strong>
-        </div>
-        <div class="post-desc"><strong>@{{ post.owner }}</strong>  {{post.media_desc}}</div>
-        <ul>
-            {% for comment in post.comment_set.all %}
-            <strong>@{{comment.user}}</strong> {{ comment.comment_text }}
-            <br>
-            {% endfor %}
-        </ul>
-        <div class="comment-section">
-            <input class="comment-input" type="text" name="comment" id="comment">
-            <button id="comment-send" value="{{post.id}}">Send</button>
-        </div>
-     
-    </div>
-</div>
+  {% include 'posts/base_post.html' %}
+{% endblock %}

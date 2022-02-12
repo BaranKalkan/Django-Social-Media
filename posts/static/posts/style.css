@@ -1,56 +1,59 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700;900&display=swap");
-* {
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 10pt;
+  vertical-align: baseline;
   font-family: 'Roboto', sans-serif;
 }
 
-li a {
-  color: green;
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block;
 }
 
-.container {
-  width: 640px;
-  background: #ffffff;
-  margin: auto;
-  margin-bottom: 30px;
+body {
+  line-height: 1;
 }
 
-img {
-  width: 100%;
-  height: 500px;
-  -o-object-fit: cover;
-     object-fit: cover;
+ol, ul {
+  list-style: none;
 }
 
-.post-like {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+blockquote, q {
+  quotes: none;
 }
 
-.post-header {
-  padding: 18px 12px;
-  font-weight: bold;
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none;
 }
 
-.post-info {
-  padding: 8px 12px 20px 12px;
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
-.post-info > div {
-  margin-bottom: 10px;
-}
-
-p {
+button {
   margin: 0;
   padding: 0;
 }
@@ -59,25 +62,98 @@ body {
   background-color: #303030;
 }
 
-.liked {
-  background-color: #c54a4a;
+a {
+  all: unset;
+  cursor: pointer;
 }
 
-ul {
-  padding: 0;
-  margin: 0;
+.post {
+  width: 600px;
+  background: #ffffff;
+  margin: auto;
+  margin: 1em auto;
 }
 
-.comment-input {
-  padding: 8px;
-  font-size: 15px;
-  border-width: 1px;
-  background-color: #FFFFFF;
-  color: #000000;
-  border-style: solid;
-  border-radius: 15px;
-  -webkit-box-shadow: 3px 3px 8px rgba(66, 66, 66, 0.24);
-          box-shadow: 3px 3px 8px rgba(66, 66, 66, 0.24);
+.post .header {
+  padding: 1em;
+}
+
+.post img {
+  width: 100%;
+  height: 500px;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.post .bottom {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  padding: 0 .6em 1em .6em;
+}
+
+.post .bottom > * {
+  margin-top: .5em;
+}
+
+.post .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.post .comments ul li {
+  padding-bottom: .2em;
+}
+
+/*
+    https://stackoverflow.com/questions/15314407/how-to-add-button-inside-input
+*/
+.comment-section {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  /* This bit draws the box around it */
+  border: 1px solid #474747;
+  /* I've used padding so you can see the edges of the elements. */
+  padding: 4px 16px;
+  border-radius: 16px;
+}
+
+.comment-section input {
+  -webkit-box-flex: 2;
+      -ms-flex-positive: 2;
+          flex-grow: 2;
+  border: none;
+  font-size: 1em;
+}
+
+.comment-section input:focus {
+  outline: none;
+}
+
+.comment-section button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: rgba(36, 138, 255, 0.603);
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.comment-section button:hover {
+  color: #1d87ff;
 }
 
 .like-button {
@@ -86,16 +162,22 @@ ul {
   cursor: pointer;
 }
 
-.like-button::-moz-focus-inner {
-  border: 0;
+.liked {
+  color: #c54a4a;
 }
 
-.like-button svg {
-  outline: none;
-  fill: rgba(255, 255, 255, 0);
-}
-
-.liked svg {
-  fill: #d84444 !important;
+.topbar-nav {
+  height: 40px;
+  padding: 0 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: white;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 /*# sourceMappingURL=style.css.map */

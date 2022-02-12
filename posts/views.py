@@ -59,8 +59,7 @@ class ResultsView(LoginRequiredMixin,generic.DetailView):
         return Post.objects.filter(
                 pub_date__lte = timezone.now()
             ).annotate(num_likes=Count('likes')
-            ).annotate(is_liked=Exists(PostLikes.objects.filter(user=self.request.user,post_id=OuterRef('pk')))
-            )
+            ).annotate(is_liked=Exists(PostLikes.objects.filter(user=self.request.user,post_id=OuterRef('pk'))))
 
 """
 def index(request):
@@ -103,7 +102,6 @@ def CommentPost(request):
     b = Comment(user=request.user, post=post, comment_text=request.POST['comment'])
     b.save()
     # post.comment.add(b)
-    
     
     dict = {'success':True, 'Comment':"successful"}
     return HttpResponse(json.dumps(dict), content_type='application/json')

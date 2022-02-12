@@ -1,0 +1,71 @@
+{% load static %}
+<div class="post">
+    <div class="header">
+        {% block header %}
+        <strong>
+          @{{ post.owner }}
+        </strong>
+        {% endblock header %}
+    </div>
+   
+    <div class="media">
+        {% block media %}
+            <img src="{% static 'posts/images/' %}{{post.media_path}}" alt="My image">
+        {% endblock media %}
+    </div>
+    
+    <div class="bottom">
+      <div class="buttons">
+        <div class="buttons-left">
+            {% block buttons-left %}
+                {% if post.is_liked %} 
+                <button value="{{post.id}}" class="like-button material-icons liked">
+                  favorite
+                </button>
+                {% else %}
+                <button value="{{post.id}}" class="like-button material-icons">
+                  favorite_border
+                </button>
+                {% endif %}
+            
+                
+            {% endblock buttons-left %}
+        </div>
+        <div class="buttons-right">
+            {% block buttons-right %}
+                <span class="material-icons">
+                  bookmark_border
+                </span>
+            {% endblock buttons-right %}
+        </div>
+    </div>
+      
+    {% block precomment-section %}
+        <strong id={{post.id}}>{{ post.num_likes }} likes</strong>
+    {% endblock precomment-section %}
+
+    {% block description %}
+        <p><strong>@{{ post.owner }}</strong>  {{post.media_desc}}</p>
+    {% endblock description%}
+
+    <div class="comments">
+        {% block comments %}
+        <ul>
+            {% for comment in post.comment_set.all %}
+            <li>
+                <strong>@{{comment.user}}</strong> {{ comment.comment_text }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endblock comments %}
+    </div>
+
+    {% block postcomment-section %}
+    <div class="comment-section">
+        <input type="text" name="" id="" class="comment-input">
+        <button id="comment-send" value="{{post.id}}">Send</button>
+    </div>
+    {% endblock postcomment-section %}
+    
+</div>
+</div> 

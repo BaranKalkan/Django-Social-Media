@@ -1,0 +1,36 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Social{% endblock %}</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" type="text/css" href="{% static 'posts/style.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+</head>
+<body>
+    <div id="topbar">
+        {% block topbar %}
+        <ul class="topbar-nav">
+            {% if user.is_authenticated %}
+            <li>{{ user.get_username }}</li>
+            <li><a style="color: red; font-weight: bold;" href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+            {% else %}
+            <li><a  style="color: rgb(0, 162, 255); font-weight: bold;" href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+            {% endif %}
+           
+        </ul>
+        {% endblock %}
+    </div>
+ 
+    <div id="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
