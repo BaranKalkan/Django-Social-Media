@@ -3,12 +3,17 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Comment, Post, PostLikes,CustomUser
 
 class CustomUserAdmin(UserAdmin):
-    pass
+    fieldsets = UserAdmin.fieldsets + (
+        (None, {'fields': ('profile_pic',)}),
+    )
+
+    add_fieldsets = UserAdmin.add_fieldsets + (
+        (None, {'fields': ('custom_field',)}),
+    )
 
 class CommentInline(admin.TabularInline):
     model = Comment
     extra = 1
-
 
 class PostAdmin(admin.ModelAdmin):
     filter_horizontal = ('likes',)
