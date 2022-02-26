@@ -11,8 +11,60 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="{% static 'posts/style.css' %}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
 </head>
+
+<script>
+    $(document).ready(function(){
+        $(".like-button").click(function(){
+          var clickedLikeButton = $(this);
+          $.post("{% url 'posts:like'%}",
+          {
+            post_id : clickedLikeButton.val(),
+            csrfmiddlewaretoken: '{{ csrf_token }}'
+          },
+          function(data,status){
+            if(data.is_liked){
+              if(!clickedLikeButton.hasClass("liked"))
+              {
+                clickedLikeButton.addClass("liked");
+                clickedLikeButton.html("favorite")
+              }
+            }
+            else{
+              if(clickedLikeButton.hasClass("liked"))
+              {
+                clickedLikeButton.removeClass("liked");
+                clickedLikeButton.html("favorite_border")
+              }
+            }
+            $('#'+clickedLikeButton.val()).html( + data.like_count + ' likes');
+          });
+        });
+    
+        
+        $("#comment-send").click(function(){
+            var clickedButton = $(this);
+            clickedButton.prop('disabled', true)
+          
+            $.post("{% url 'posts:comment'%}",
+            {
+              post_id : clickedButton.val(),
+              comment : $(".comment-input").val(),
+              csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            function(data,status){
+              if(data.success)
+              {
+                location.reload();
+              }
+              else
+              {
+                clickedButton.prop('disabled', false)
+              }
+            });
+        });
+    });
+</script>
 <body>
     <div id="topbar">
         {% block topbar %}

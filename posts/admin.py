@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from .models import Comment, Post, PostLikes,CustomUser
 
-
-from .models import Comment, Post, PostLikes
+class CustomUserAdmin(UserAdmin):
+    pass
 
 class CommentInline(admin.TabularInline):
     model = Comment
@@ -22,3 +24,4 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Post, PostAdmin)
+admin.site.register(CustomUser, CustomUserAdmin)

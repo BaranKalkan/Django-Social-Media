@@ -3,60 +3,6 @@
 
 {% block title %}Post Details{% endblock %}
 
-
 {% block content %}
-
-<script>
-  $(document).ready(function(){
-    $(".like-button").click(function(){
-        var clickedLikeButton = $(this);
-        $.post("{% url 'posts:like'%}",
-        {
-          post_id : clickedLikeButton.val(),
-          csrfmiddlewaretoken: '{{ csrf_token }}'
-        },
-        function(data,status){
-          if(data.is_liked){
-            if(!clickedLikeButton.hasClass("liked"))
-            {
-              clickedLikeButton.addClass("liked");
-              clickedLikeButton.html("favorite")
-            }
-          }
-          else{
-            if(clickedLikeButton.hasClass("liked"))
-            {
-              clickedLikeButton.removeClass("liked");
-              clickedLikeButton.html("favorite_border")
-            }
-          }
-          $('#'+clickedLikeButton.val()).html( + data.like_count + ' likes');
-        });
-    });
- 
-    $("#comment-send").click(function(){
-      var clickedButton = $(this);
-      clickedButton.prop('disabled', true)
-    
-      $.post("{% url 'posts:comment'%}",
-      {
-        post_id : clickedButton.val(),
-        comment : $(".comment-input").val(),
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-      },
-      function(data,status){
-        if(data.success)
-        {
-          location.reload();
-        }
-        else
-        {
-          clickedButton.prop('disabled', false)
-        }
-      });
-    });
-  });
-  </script>
-  
   {% include 'posts/base_post.html' %}
 {% endblock %}
