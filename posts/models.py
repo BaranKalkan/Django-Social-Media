@@ -6,21 +6,20 @@ from django.contrib import admin
 from django.contrib.auth.models import User
      
 from django.contrib.auth.models import AbstractUser
-
+from django.utils.html import mark_safe
 
 class CustomUser(AbstractUser):
-    profile_pic = models.CharField(max_length=50)
-
+    profile_pic = models.ImageField(upload_to = 'profile_pictures')
 
 class Post(models.Model):
     owner = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True)
-    media_path = models.CharField(max_length=200)
+    media_path = models.ImageField(upload_to = 'post_pictures')
     media_desc = models.CharField(max_length=200, default="")
     pub_date = models.DateTimeField('date published')
     likes = models.ManyToManyField(CustomUser, related_name="likes", through='PostLikes')
     
     def __str__(self):
-        return self.media_path
+        return self.media_path.url
  
     @admin.display(
         boolean=True,
