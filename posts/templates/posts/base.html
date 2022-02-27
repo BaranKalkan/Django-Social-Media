@@ -70,7 +70,7 @@
         {% block topbar %}
         <ul class="topbar-nav">
             {% if user.is_authenticated %}
-            <li><img src="{{ MEDIA_URL }}{{ user.profile_pic.url }}" style="border-radius: 50%; object-fit: cover;" width="48px" height="48px">
+            <li><img class="profile-pic" src="{{ MEDIA_URL }}{{ user.profile_pic.url }}">
                 <span>@{{ user.get_username }}</span></li>
             <li><a style="color: red; font-weight: bold;" href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
             {% else %}

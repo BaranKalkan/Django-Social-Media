@@ -2,6 +2,7 @@
 <div class="post">
     <div class="header">
         {% block header %}
+        <img class="profile-pic" src="{{ MEDIA_URL }}{{post.owner.profile_pic.url}}">
         <strong>
           @{{ post.owner }}
         </strong>
@@ -45,7 +46,7 @@
     {% endblock precomment-section %}
 
     {% block description %}
-        <p><strong>@{{ post.owner }}</strong>  {{post.media_desc}}</p>
+        <p class="comment" ><strong>@{{ post.owner }}</strong>{{post.media_desc}}</p>
     {% endblock description%}
 
     <div class="comments">
@@ -53,7 +54,8 @@
         <ul>
             {% for comment in post.comment_set.all %}
             <li>
-                <strong>@{{comment.user}}</strong> {{ comment.comment_text }}
+                <img class="profile-pic" src="{{ MEDIA_URL }}{{comment.user.profile_pic.url}}">
+                <p class="comment"><strong>@{{comment.user}}</strong>{{ comment.comment_text }}</p>
             </li>
             {% endfor %}
         </ul>

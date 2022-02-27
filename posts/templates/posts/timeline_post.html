@@ -22,7 +22,7 @@
 <ul>
     {% for comment in post.comment_set.all|slice:"0:3" %}
     <li>
-        <strong>@{{comment.user}}</strong> {{ comment.comment_text }}
+        <img class="profile-pic" src="{{ MEDIA_URL }}{{comment.user.profile_pic.url}}"><p class="comment"><strong>@{{comment.user}}</strong>{{ comment.comment_text }}</p>
     </li>
     {% endfor %}
 </ul>
